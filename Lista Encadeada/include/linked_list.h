@@ -39,13 +39,13 @@ void LinkedList_remove_new(LinkedList *L, int val);
 size_t LinkedList_size(const LinkedList *L);
 
 // Função que retorna o primeiro valor
-void LinkedList_first_val(const LinkedList *L);
+int LinkedList_first_val(const LinkedList *L);
 
 // Função que retorna um valor num dado indice
-void LinkedList_get_val(const LinkedList *L, int index);
+int LinkedList_get_val(const LinkedList *L, int index);
 
 // Função que retorna o valor final
-void LinkedList_last_val(const LinkedList *L);
+int LinkedList_last_val(const LinkedList *L);
 
 
 #endif

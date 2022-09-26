@@ -185,7 +185,7 @@ void LinkedList_remove_new(LinkedList *L, int val){
     }
 }
 
-void LinkedList_first_val(const LinkedList *L){
+int LinkedList_first_val(const LinkedList *L){
     if(LinkedList_is_empty(L)){
         fprintf(stderr, "ERROR in 'LinkedList_first_val'\n");   
         fprintf(stderr, "List is empty\n");
@@ -196,7 +196,7 @@ void LinkedList_first_val(const LinkedList *L){
     }  
 }
 
-void LinkedList_get_val(const LinkedList *L, int index){
+int LinkedList_get_val(const LinkedList *L, int index){
     if(LinkedList_is_empty(L)){
         fprintf(stderr, "ERROR in 'LinkedList_get_val'\n");   
         fprintf(stderr, "List is empty\n");
@@ -205,7 +205,7 @@ void LinkedList_get_val(const LinkedList *L, int index){
     else if(index < 0 || index >= L->size){
         fprintf(stderr, "ERROR in 'LinkedList_get_val'\n");   
         fprintf(stderr, "Invalid Index: %d\n", index);
-        fprintf(stderr, "Try an index within: [0, %d]\n", L->size - 1);
+        fprintf(stderr, "Try an index within: [0, %lu]\n", L->size - 1);
         exit(EXIT_FAILURE);
     }
     else{
@@ -217,7 +217,7 @@ void LinkedList_get_val(const LinkedList *L, int index){
     }
 } 
 
-void LinkedList_last_val(const LinkedList *L){
+int LinkedList_last_val(const LinkedList *L){
     return L->end->val;
 }
 
