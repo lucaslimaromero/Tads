@@ -26,11 +26,11 @@ void LinkedList_destroy(LinkedList **L_ref){
     LinkedList *L = *L_ref;
 
     SNode *p = L->begin;
-    SNode *aux = NULL;
+    SNode *aux = NULL; // Preciso do aux, pois ao dar free(p) eu perderia o p->next
 
     while(p != NULL){
-        aux = p;
-        p = p->next;
+        aux = p; // aux aponta para onde o p aponta (salvamos a posição)
+        p = p->next; // avançamos uma posição
         free(aux);
     }
     free(L);
@@ -41,6 +41,22 @@ void LinkedList_destroy(LinkedList **L_ref){
 bool LinkedList_is_empty(const LinkedList *L){
     return (L->size == 0);
 }
+
+size_t LinkedList_size(const LinkedList *L){
+     return L->size;
+
+    // Caso eu não tenha o fator size na minha lista e eu tenha que contar
+    // A complexidade dessa função é O(n), pois precisamos varrer toda a lista
+    // size_t size = 0;
+    // SNode *p = L->begin;
+    // while(p != NULL){
+    //     size++;
+    //     p = p->next;
+    // }
+
+    // return size;
+}
+
 
 SNode *SNode_create(int val){ // Aloca um nó dinamicamente e atribui a ele um valor, bem como seta como NULL o ponteiro para o próximo elemento
     SNode *snode = (SNode *) calloc(1, sizeof(SNode));
@@ -115,6 +131,8 @@ void LinkedList_remove(LinkedList *L, int val){
             }
             free(pos);
         }
+        // Não podemos implementar um else if val no fim da lista, pois nosso algoritmo quer retirar a primeira aparição do elemento
+        // Dessa forma, é preciso verificar se sua única aparição é no final antes de retirá-lo    
         // Caso 2: Meio - Vamos usar dois ponteiros para Nós, um que aponte para o Nó a ser removido, e o outro para o nó anterior a ele
         else{
             pos = L->begin->next;
@@ -125,14 +143,82 @@ void LinkedList_remove(LinkedList *L, int val){
                 pos = pos->next;
                 
             }
-            prev->next = pos->next;
+            // Consertando o encadeamento
+            if(pos != NULL){ // Quer dizer que um nó de valor val foi encontrado, e pos aponta para ele nesse momento do código
+                prev->next = pos->next;
+
+                // Caso 3: Final da lista
+                if(pos->next == NULL){ // Se o pos parou no último elemento da lista
+                    L->end = prev;
+                }
+            }
+            
             free(pos);
         }
         L->size--;
     }
-    
+}
 
+void LinkedList_remove_new(LinkedList *L, int val){
+    if(!LinkedList_is_empty(L)){
+        SNode *pos = L->begin;
+        SNode *prev = NULL;
 
+        while (pos != NULL && pos->val != val){
+            prev = pos; // Não pode ser prev = prev->next; pois o prev next pode ser NULL, no caso de ser o início da lista
+            pos = pos->next;
+        }
+
+        if (pos != NULL){ // Se achou um elemento
+            if(L->end == pos){ // Encontrou no final
+                L->end = prev;
+            }
+            if(L->begin == pos){ // Encontrou no início
+                L->begin = pos->next;
+            }
+            else{
+                prev->next = pos->next;
+            }
+
+            free(pos);
+        }
+    }
+}
+
+void LinkedList_first_val(const LinkedList *L){
+    if(LinkedList_is_empty(L)){
+        fprintf(stderr, "ERROR in 'LinkedList_first_val'\n");   
+        fprintf(stderr, "List is empty\n");
+        exit(EXIT_FAILURE);
+    }
+    else{
+        return L->begin->val;
+    }  
+}
+
+void LinkedList_get_val(const LinkedList *L, int index){
+    if(LinkedList_is_empty(L)){
+        fprintf(stderr, "ERROR in 'LinkedList_get_val'\n");   
+        fprintf(stderr, "List is empty\n");
+        exit(EXIT_FAILURE);
+    }
+    else if(index < 0 || index >= L->size){
+        fprintf(stderr, "ERROR in 'LinkedList_get_val'\n");   
+        fprintf(stderr, "Invalid Index: %d\n", index);
+        fprintf(stderr, "Try an index within: [0, %d]\n", L->size - 1);
+        exit(EXIT_FAILURE);
+    }
+    else{
+        SNode *p = L->begin;
+        for (int i = 0; i < index; i++){
+            p = p->next;
+        }
+        return p->val; // Retorna o valor no index solicitado
+    }
+} 
+
+void LinkedList_last_val(const LinkedList *L){
+    return L->end->val;
 }
 
 void LinkedList_print(const LinkedList *L){
@@ -144,5 +230,13 @@ void LinkedList_print(const LinkedList *L){
         p = p->next;
     }
     printf("NULL\n");
+
+    if(L->end == NULL){ // Lista vazia
+        printf("L->end = NULL\n");
+    }
+    else{
+        printf("L->end = %d\n", L->end->val);
+    }
+    puts("");
 }
 

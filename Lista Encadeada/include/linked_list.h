@@ -2,6 +2,7 @@
 #define LINKED_LIST_H
  
 #include <stdbool.h>
+#include <stddef.h>
 
 typedef struct _snode SNode;
 typedef struct _linked_list LinkedList;
@@ -32,7 +33,19 @@ void LinkedList_print(const LinkedList *L);
 // A lógica é percorrer a lista, se ela não tiver vazia, até encontrar o elemento que aponta para esse valor, alterando o *next para o que o valor a ser retirado aponta
 // Caso 1: Remoção na cabeça - criamos um SNode *p = L->begin, e L->begin = L->begin->next
 void LinkedList_remove(LinkedList *L, int val);
+void LinkedList_remove_new(LinkedList *L, int val);
 
+// Função retorna o tamanho da lista
+size_t LinkedList_size(const LinkedList *L);
+
+// Função que retorna o primeiro valor
+void LinkedList_first_val(const LinkedList *L);
+
+// Função que retorna um valor num dado indice
+void LinkedList_get_val(const LinkedList *L, int index);
+
+// Função que retorna o valor final
+void LinkedList_last_val(const LinkedList *L);
 
 
 #endif
