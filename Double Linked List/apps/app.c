@@ -1,4 +1,4 @@
-#include "doubly_linked_list.h"
+#include "list.h"
 #include <stdio.h>
 
 int main(){
