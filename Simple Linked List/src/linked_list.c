@@ -33,7 +33,7 @@ void LinkedList_destroy(LinkedList **L_ref){
         p = p->next; // avançamos uma posição
         free(aux);
     }
-    free(L);
+    free(L); // Desalocamos a lista em si
 
     *L_ref = NULL;
 }
@@ -219,6 +219,11 @@ int LinkedList_get_val(const LinkedList *L, int index){
 } 
 
 int LinkedList_last_val(const LinkedList *L){
+    if(LinkedList_is_empty(L)){
+        fprintf(stderr, "ERROR in 'LinkedList_last_val'\n");   
+        fprintf(stderr, "List is empty\n");
+        exit(EXIT_FAILURE);
+    }
     return L->end->val;
 }
 

@@ -17,7 +17,7 @@ bool LinkedList_is_empty(const LinkedList *L);
 LinkedList *LinkedList_create();
 
 // Funções para desalocar a LinkedList
-void LinkedList_destroy();
+void LinkedList_destroy(LinkedList **L_ref);
 
 //Função para inserir na cabeça
 void LinkedList_add_first(LinkedList *L, int val); // Inserção na cabeça (início) da lista
