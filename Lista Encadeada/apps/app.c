@@ -35,16 +35,18 @@ int main(){
         LinkedList_print(L);
     }
 
+    puts("");
     printf("List Size: %lu\n", LinkedList_size(L));
-
     printf("First: %d\n", LinkedList_first_val(L));
+    printf("Get [0]: %d\n", LinkedList_get_val(L, 0));
     printf("Get [3]: %d\n", LinkedList_get_val(L, 3));
     printf("Last: %d\n", LinkedList_last_val(L));
+    puts("");
 
-    for(int i = 1; i < N; i += 2){
-        LinkedList_remove_new(L, i);
-        LinkedList_print(L);
-    }
+    // for(int i = 1; i < N; i += 2){
+    //     LinkedList_remove_new(L, i);
+    //     LinkedList_print(L);
+    // }
 
     return 0;
 }

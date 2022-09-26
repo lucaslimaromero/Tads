@@ -182,6 +182,7 @@ void LinkedList_remove_new(LinkedList *L, int val){
 
             free(pos);
         }
+        L->size--;
     }
 }
 
@@ -236,6 +237,7 @@ void LinkedList_print(const LinkedList *L){
     }
     else{
         printf("L->end = %d\n", L->end->val);
+        printf("List Size: %lu\n", L->size);
     }
     puts("");
 }
