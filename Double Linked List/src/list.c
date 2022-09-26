@@ -84,18 +84,106 @@ void List_add_first(List *L, int val){
     L->size++;
 }
 
+void List_add_last(List *L, int val){
+    Node *p = Node_create(val);
 
+    // Lista vazia
+    if(List_is_empty(L)){
+        L->begin = p;
+        // L->end = p;
+    }
+    // Lista possui elementos
+    else{
+        L->end->next = p; // O próximo nó do nosso nó final antigo será o nosso novo nó
+        p->prev = L->end; 
+        // L->end = p;
+    }
 
+    L->end = p;
+    L->size++;
+}
 
+void List_print(const List *L){
+    Node *p = L->begin;
 
+    printf("L -> ");
+    while(p != NULL){
+        printf("%d -> ", p->val);
+        p = p->next;
+    }
+    puts("NULL");
 
+    if(L->end == NULL){ // Lista vazia
+        printf("L->end = NULL\n");
+    }
+    else{
+        printf("L->end = %d\n", L->end->val);
+    }
 
+    printf("Size: %lu\n", L->size);
+    puts("");
+}
 
+void List_inverted_print(const List *L){
+    Node *p = L->end;
 
+    printf("L -> end -> ");
+    while(p != NULL){
+        printf("%d -> ", p->val);
+        p = p->prev;
+    }
+    puts("NULL");
 
+    if(L->end == NULL){ // Lista vazia
+        printf("L->begin = NULL\n");
+    }
+    else{
+        printf("L->begin = %d\n", L->begin->val);
+    }
 
+    printf("Size: %lu\n", L->size);
+    puts("");
+}
 
+void List_remove(List *L, int val){
+    if(!List_is_empty(L)){
+        Node *p = L->begin;
+        if(L->begin->val == val){ // Caso 1: Removendo da cabeça da lista
 
+            L->begin = p->next;
 
+            if(L->end == p){ // Se a lista possuir apenas um elemento 
+                // L->begin = NULL; é equivalente a L->begin = p->next;
+                L->end = NULL;
+            }
+            else{ // Lista possui mais de um elemento
+                p->next->prev = NULL;
+            }
+            
+        }
+
+        else{ // Caso 2: No meio da lista
+            p = L->begin->next;
+
+            while(p != NULL){
+                if(p->val == val){
+                    if(p == L->end){ // Caso 3, é o nó final
+                        
+                    }
+                    else{ // Caso 2: meio da lista
+                        p->prev->next = p->next;
+                        p->next->prev; = p->prev;
+                    }
+                }
+                else{
+                    p = p->next;
+                }
+                    
+            }
+        }
+        free(p);
+        L->size--;
+    }
+}
 
 //*************************** FIM DA IMPLEMENTAÇÃO DO TAD ********************//

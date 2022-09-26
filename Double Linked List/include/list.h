@@ -24,8 +24,17 @@ bool List_is_empty(const List *L);
 
 // Adiciona no início
 void List_add_first(List *L, int val);
+// Função de inserção na cauda
+void List_add_last(List *L, int val);
 
+// Função de impressão 
+void List_print(const List *L);
 
+// Função de impressão invertida
+void List_inverted_print(const List *L);
+
+// Função de Remoção de elementos da lista
+void List_remove(List *L, int val);
 
 //******************************* FIM DO HEADER DO TAD *******************************//
 
