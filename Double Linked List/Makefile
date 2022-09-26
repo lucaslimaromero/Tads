@@ -7,13 +7,13 @@ SRC = ./src
 all: libed myapps
 
 libed:
-	gcc -c $(SRC)/NOME_DO_TAD.c -I $(INCLUDE) -o $(OBJ)/NOME_DO_TAD.o
+	gcc -c $(SRC)/doubly_linked_list.c -I $(INCLUDE) -o $(OBJ)/doubly_linked_list.o
 
 myapps:
-	gcc $(APPS)/NOME_DO_APP.c $(OBJ)/*.o -I $(INCLUDE) -o $(BIN)/NOME_DO_APP
+	gcc $(APPS)/app.c $(OBJ)/*.o -I $(INCLUDE) -o $(BIN)/app
 
 run:
-	$(BIN)/NOME_DO_APP
+	$(BIN)/app
 
 clean:
 	rm $(BIN)/* $(OBJ)/*

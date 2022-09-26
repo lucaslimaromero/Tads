@@ -1,5 +1,5 @@
-#ifndef NOME_DO_TAD_H
-#define NOME_DO_TAD_H
+#ifndef DOUBLY_LINKED_LIST_H
+#define DOUBLY_LINKED_LIST_H
 
 //*************************** HEADER DO TAD - ESPECIFICAÇÃO ***************************//
 
