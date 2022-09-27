@@ -159,21 +159,28 @@ void List_remove(List *L, int val){
             else{ // Lista possui mais de um elemento
                 p->next->prev = NULL;
             }
-            
+            free(p);
+            L->size--;
         }
 
         else{ // Caso 2: No meio da lista
-            p = L->begin->next;
+            p = p->next;
 
             while(p != NULL){
                 if(p->val == val){
+                    p->prev->next = p->next;
                     if(p == L->end){ // Caso 3, é o nó final
-                        
+                        L->end = p->prev;
+                        // L->end->next = NULL;
                     }
                     else{ // Caso 2: meio da lista
-                        p->prev->next = p->next;
-                        p->next->prev; = p->prev;
+                        //p->prev->next = p->next;
+                        p->next->prev = p->prev;
                     }
+
+                    free(p);
+                    p = NULL;
+                    L->size--;
                 }
                 else{
                     p = p->next;
@@ -181,8 +188,7 @@ void List_remove(List *L, int val){
                     
             }
         }
-        free(p);
-        L->size--;
+        
     }
 }
 
