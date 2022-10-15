@@ -14,11 +14,11 @@ typedef struct _node{
 
 // Criação de um nó especial raiz que aponta para o início da árvore
 
-ArvBin *ArvBin_create(){
+Node **ArvBin_create(){
     // Criação de um ponteiro para o tipo ArvBin
     // ArvBin é um ponteiro que aponta para nós
     // Logo, raiz é um ponteiro de ponteiro
-    ArvBin *root = (ArvBin*) calloc(1, sizeof(ArvBin));
+    Node *root = (Node*) calloc(1, sizeof(Node));
     if(root != NULL){
         *root = NULL;
     }
