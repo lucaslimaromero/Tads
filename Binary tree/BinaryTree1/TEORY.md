@@ -34,4 +34,28 @@ ______________________
 
 # Implementação com Alocação dinâmica:
 - Para guardar o primeiro nó da lista, usaremos um ponteiro para ponteiro, para facilitar caso quisermos mudar quem é a raiz da árvore
+No programa principal: 
 ArvBin* raiz;
+
+# Árvore Binária de Busca: 
+-> Os nós a esquerda devem ser sempre menores que o nó pai
+-> Os nós a direita devem ser sempre maiores que o nó pai
+- Aplicações: Busca Binária, Análise de Expressões algébricas...
+
+- Árvores desbalanceadas são aquelas que a porção direita ou esquerda é maior que a outra ponta
+
+# Lógica de Inserção:
+- Inserir um valor V:
+1. Compare V com a raiz
+2. V é menor que a raiz, vai para a sub-árvore da esquerda
+3. V é maior, vai para a da direita
+4. Aplique isso recursivamente
+
+OBS.: Deve-se considerar o caso em que a árvore está vazia (*raiz == NULL) = O conteúdo da raiz (o valor que ArvBin aponta é nulo)
+
+# Lógica de Remoção de um nó
+-> Nó folha (Não afeta em nada o restante da árvore) -> Mais fácil
+-> Nó com 1 filho
+-> Nó com 2 filhos
+-> Último nó de uma árvore
+-> Árvore já vazia
