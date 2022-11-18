@@ -12,6 +12,8 @@ typedef struct _node *ArvBin; // Um ponteiro para um nó será apelidado de ArvB
 
 // Na função principal, será criado um ponteiro para esse ponteiro para nó: 
 
+// Criação de um nó
+Node *ArvBin_Node_create(int value);
 
 // Criação da Árvore:
 ArvBin *ArvBin_create();
@@ -40,6 +42,12 @@ void ArvBin_emOrdem(ArvBin *raiz);
 
 // Pós-Ordem: ESQUERDA - DIREITA - RAIZ 
 void ArvBin_posOrdem(ArvBin *raiz);
+
+// Inserção de um valor na árvore
+bool ArvBin_insert(ArvBin *raiz, int value); // Retorna 1 se foi efetuada a operação, e 0 se o elemento já existe ou se não alocou
+
+// Remoção de um valor da árvore (sem valores repetidos)
+bool ArvBin_remove(ArvBin *raiz, int value); // Busca o nó a ser removido
 
 //*************************************************************************************//
 
