@@ -16,8 +16,9 @@ int main(){
     }
 
     ArvBin_emOrdem(raiz);
-
+    
     printf("Numero de Nos: %d", ArvBin_amount_nodes(raiz));
+    printf("Existe o valor 3 na árvore? %d", ArvBin_consult(raiz, 3));
 
     return 0;
 }

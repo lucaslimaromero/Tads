@@ -41,7 +41,11 @@ void ArvBin_posOrdem(ArvBin *raiz);
 bool ArvBin_insert(ArvBin *raiz, int value); // Retorna 1 se foi efetuada a operação, e 0 se o elemento já existe ou se não alocou
 
 // Remoção de um valor da árvore (sem valores repetidos)
+Node *remove_atual(Node *atual);
 bool ArvBin_remove(ArvBin *raiz, int value); // Busca o nó a ser removido
+
+// Função para consultar se existe um valor na árvore
+bool ArvBin_consult(ArvBin *raiz, int value);
 
 
 

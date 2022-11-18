@@ -134,60 +134,33 @@ bool ArvBin_insert(ArvBin *raiz, int value){ // Sempre a inserção será numa f
     
     // Procurar onde esse novo nó deve ser inserido
     if(*raiz == NULL){ // Árvore vazia
-        *raiz = novo;
+        *raiz = novo; // O nó será o primeiro
     }
     else{
         Node *atual = *raiz;
         Node *anterior = NULL;
 
-        while(atual != NULL){
+        while(atual != NULL){ // Enquanto eu não chegar numa folha
             anterior = atual;
-            if(value == atual->info){
-                free(novo);
-                printf("Elemento já existe!");
+            if(value == atual->info){ // Elementos repetidos não serão alocados
+                free(novo); // Eu libero o nó que eu aloquei achando que eu iria colocar na árvore e retorno 0, como um código de não append
+                printf("Elemento já existe!"); // Elementos repetidos não serão alocados
                 return 0; // Elemento já existe
             }
 
-            if(value > atual->info)
+            if(value > atual->info) // Se o valor do nó for maior que o que eu to comparando ele vai pra direita, senão para a esquerda
                 atual = atual->dir;
             else
                 atual = atual->esq;
         }
 
+        // Nesse ponto, chegou-se num nó folha, apontado pelo atual, e o anterior aponta para o pai encontrado do nó a ser inserido
         if(value > anterior->info)
             anterior->dir = novo;
         else
             anterior->esq = novo;
     }
     return 1;
-}
-
-bool ArvBin_remove(ArvBin *raiz, int value){
-    if(raiz == NULL) // Verifica se a Árvore não foi alocada
-        return 0;
-
-    Node *anterior = NULL; // Nó auxiliar anterior ao atual
-    Node *atual = *raiz; // Nó atual que percorrerá a árvore começando na raiz
-
-    while(atual != NULL){ // Enquanto o Nó atual é um nó válido (O atual sai do while com o valor NULL, quando ele é o nó filho de uma folha)
-        if(value == atual->info){ // Quando encontrar o valor
-            if(atual == *raiz) 
-                *raiz = remove_atual(atual); // Se o valor que eu quero remover está na raiz, basta removê-lo
-            else{
-                if(anterior->dir == atual) // Se o nó anterior
-                    anterior->dir = remove_atual(atual);
-                else
-                    anterior->esq = remove_atual(atual);
-            }
-            return 1;
-        }
-        anterior = atual;
-        if(value > atual->info){
-            atual = atual->dir;
-        }
-        else
-            atual = atual->esq;
-    }
 }
 
 Node *remove_atual(Node *atual){ // Função auxiliar, trata os tipos de remoção -> se eu preciso achar alguém para substituir
@@ -213,4 +186,53 @@ Node *remove_atual(Node *atual){ // Função auxiliar, trata os tipos de remoç�
     no2->dir = atual->dir;
     free(atual);
     return no2;
+}
+
+bool ArvBin_remove(ArvBin *raiz, int value){
+    if(raiz == NULL) // Verifica se a Árvore não foi alocada
+        return 0;
+
+    Node *anterior = NULL; // Nó auxiliar anterior ao atual
+    Node *atual = *raiz; // Nó atual que percorrerá a árvore começando na raiz
+
+    while(atual != NULL){ // Enquanto o Nó atual é um nó válido (O atual sai do while com o valor NULL, quando ele é o nó filho de uma folha)
+        if(value == atual->info){ // Quando encontrar o valor
+
+            if(atual == *raiz) 
+                *raiz = remove_atual(atual); // Se o valor que eu quero remover está na raiz, basta removê-lo
+                
+            else{
+                if(anterior->dir == atual) // Se o nó anterior
+                    anterior->dir = remove_atual(atual);
+                else
+                    anterior->esq = remove_atual(atual);
+            }
+            return 1;
+        }
+        anterior = atual;
+        if(value > atual->info){
+            atual = atual->dir;
+        }
+        else
+            atual = atual->esq;
+    }
+}
+
+bool ArvBin_consult(ArvBin *raiz, int value){
+    if(raiz == NULL){
+        return 0;
+    }
+    Node *atual = *raiz;
+    while(atual != NULL){
+        if(atual->info == value){
+            return 1;
+        }
+        if(value > atual->info){
+            atual = atual->dir;
+        }
+        else{
+            atual = atual->esq;
+        }
+    }
+    return 0;
 }
