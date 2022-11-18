@@ -13,12 +13,12 @@ Ex.: Estrutura de Diretórios do nosso computador
 *Arestas*: É uma conexão entre dois "vértices" ou "nós"
 
 # Aplicações
-- s ão adequadas para representar estruturas hierárquicas não lineares
+- são adequadas para representar estruturas hierárquicas não lineares
 
 # Definições: Classificação dos nós
 
 - Pai: é o antecessor imediato de um vértice
-- Filho: é o antecessor imediato de um vértice
+- Filho: é o sucessor imediato de um vértice
 - Raiz: vértice que não possui nenhum pai
 - Nós terminais ou folhas: qualquer vértice que não possui filhos
 - Nós não-terminais ou internos: qualquer vértice que possui pelo menos um filho
@@ -34,11 +34,11 @@ Ex.: Estrutura de Diretórios do nosso computador
 -> Grau de um vértice: número de sub-árvores do vértice
 
 # Altura da árvore
-- Ou profundidade, é o comprimento do caminho mais longo da raziz até uma das folhas
+- Ou profundidade, é o comprimento do caminho (n° da arestas) mais longo da raiz até uma das folhas
 
 # Níveis
 - Os vértices da árvore são classificados em níveis, cada vértice terá um nível/hierarquia
-- O nível é o número de nós no caminho entre o vértice analisado e a raiz
+- O nível é o número de nós no caminho entre o vértice analisado e a raiz (n° de arestas)
 
 # Árvores Binárias
 - Tipo especial de árvore, em que cada vértice pode possuir apenas duas sub-árvores (a direita e a esquerda)

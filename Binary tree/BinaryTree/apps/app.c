@@ -3,6 +3,7 @@
 
 int main(){
 
+    // ArvBin *raiz; (ponteiro para ponteiro) - nó especial
     ArvBin *raiz = ArvBin_create(); // Criação no programa principal, da raiz da árvore (a raiz é um ponteiro para ponteiro)
     // A variável raiz, guarda o endereço de um endereço 
     int valor;
