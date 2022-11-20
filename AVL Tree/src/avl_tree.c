@@ -8,6 +8,7 @@
 
 typedef struct _node{
     int info; // Informação que ele carrega
+    int alt; // Altura da sub-árvore, cujo pai é o nó em questão para calcular o fb de cada nó
     struct _node *esq; // Endereço do nó à sua esquerda
     struct _node *dir; // Endereço do nó à sua direita
 } Node; // Apelido para o struct _node = Node
@@ -20,6 +21,7 @@ Node *ArvBin_Node_create(int value){
     }
 
     node->info = value;
+    node->alt = 0;
     node->dir = NULL;
     node->esq = NULL;
 
@@ -67,14 +69,14 @@ bool ArvBin_is_empty(ArvBin *raiz){ // Conteúdo da raiz = endereço de memória
 
 int ArvBin_height(ArvBin *raiz){
     if(ArvBin_is_empty(raiz)){ // Condição de parada
-        // Se a árvore estiver vazia, a sua altura é 0
+        // Se a árvore estiver vazia, a sua alt é 0
         return 0;
     }
 
     int left_height = ArvBin_height(&((*raiz)->esq));
     int right_height = ArvBin_height(&((*raiz)->dir));
 
-    // A altura da árvore é dada pela maior quantidade de arestas
+    // A alt da árvore é dada pela maior quantidade de arestas
     if(left_height > right_height){
         return (left_height + 1);
     }
@@ -126,96 +128,179 @@ void ArvBin_posOrdem(ArvBin *raiz){
     }
 }
 
-bool ArvBin_insert(ArvBin *raiz, int value){ // Sempre a inserção será numa folha
-    if(raiz == NULL){ // Verifica se há problema na alocação da raiz
-        return 0;
-    }
-    Node *novo = ArvBin_Node_create(value); // Novo nó que eu irei inserir
-    
-    // Procurar onde esse novo nó deve ser inserido
-    if(*raiz == NULL){ // Árvore vazia
-        *raiz = novo; // O nó será o primeiro
-    }
-    else{
-        Node *atual = *raiz;
-        Node *anterior = NULL;
-
-        while(atual != NULL){ // Enquanto eu não chegar numa folha
-            anterior = atual;
-            if(value == atual->info){ // Elementos repetidos não serão alocados
-                free(novo); // Eu libero o nó que eu aloquei achando que eu iria colocar na árvore e retorno 0, como um código de não append
-                printf("Elemento já existe!"); // Elementos repetidos não serão alocados
-                return 0; // Elemento já existe
-            }
-
-            if(value > atual->info) // Se o valor do nó for maior que o que eu to comparando ele vai pra direita, senão para a esquerda
-                atual = atual->dir;
-            else
-                atual = atual->esq;
-        }
-
-        // Nesse ponto, chegou-se num nó folha, apontado pelo atual, e o anterior aponta para o pai encontrado do nó a ser inserido
-        if(value > anterior->info)
-            anterior->dir = novo;
-        else
-            anterior->esq = novo;
-    }
-    return 1;
+// ------------- Funções Auxiliares ------------- //
+int alt_node(Node *node){ // Recebe um nó e devolve a alt dele
+    if(node == NULL) // Se o nó for nulo (não existir), a alt dele será considerada -1
+        return -1;
+    else
+        return node->alt;
 }
 
-Node *remove_atual(Node *atual){ // Função auxiliar, trata os tipos de remoção -> se eu preciso achar alguém para substituir
-    Node *no1, *no2;
-    if(atual->esq == NULL){
-        no2 = atual->dir;
-        free(atual);
-        return no2;
+int fatorBalanceamento_node(Node *node){ // Quero saber a diferença em módulo das alts dos filhos do nó
+    return labs(alt_node(node->esq) - alt_node(node->dir));
+}
+
+int maior(int x, int y){
+    if(x > y)
+        return x;
+    else
+        return y;
+}
+// -------------------------------------------- //
+
+// Função de Rotação LL
+void ArvBin_RotationLL(ArvBin *raiz){
+    Node *node; // Nó auxiliar para guardar o endereço do filho da esquerda
+    node = (*raiz)->esq;
+    (*raiz)->esq = node->dir;
+    node->dir = *raiz;
+
+    // Recalculando as alts
+    (*raiz)->alt = maior(alt_node((*raiz)->esq), alt_node((*raiz)->dir)) + 1;
+    node->alt = maior(alt_node(node->esq), (*raiz)->alt) + 1;
+
+    *raiz = node;
+}
+
+// Função de Rotação RR
+void ArvBin_RotationRR(ArvBin *raiz){
+    Node *node; // Nó auxiliar para guardar o endereço do filho da direita
+    node = (*raiz)->dir;
+    (*raiz)->dir = node->esq;
+    node->esq = *raiz;
+
+    // Recalculando as alts
+    (*raiz)->alt = maior(alt_node((*raiz)->esq), alt_node((*raiz)->dir)) + 1;
+    node->alt = maior(alt_node(node->esq), (*raiz)->alt) + 1;
+
+    *raiz = node;
+}
+
+void ArvBin_RotationLR(ArvBin *raiz){
+    ArvBin_RotationRR(&(*raiz)->esq);
+    ArvBin_RotationLL(raiz);
+}
+
+void ArvBin_RotationRL(ArvBin *raiz){
+    ArvBin_RotationLL(&(*raiz)->dir);
+    ArvBin_RotationRR(raiz);
+}
+
+bool ArvBin_insert(ArvBin *raiz, int value){ // Sempre a inserção será numa folha
+    int res;
+
+    // Árvore vazia ou nó folha
+    if(*raiz == NULL){ 
+        Node *novo = ArvBin_Node_create(value);
+        if(novo == NULL)
+            return 0;
+        
+        *raiz = novo;
+        return 1;
     }
-    
-    no1 = atual;
-    no2 = no2->dir;
-    while(no2->dir != NULL){
+
+    Node *atual = *raiz;
+    if(value < atual->info){
+        if((res = ArvBin_insert(&(atual->esq), value)) == 1){
+            if(fatorBalanceamento_node(atual) >= 2){
+                if(value < (*raiz)->esq->info){
+                    ArvBin_RotationLL(raiz);
+                }
+                else{
+                    ArvBin_RotationLR(raiz);
+                }
+            }
+        }
+    }
+    else{
+        if(value > atual->info){
+            if((res = ArvBin_insert(&(atual->dir), value)) == 1){
+                if(fatorBalanceamento_node(atual) >= 2){
+                    if((*raiz)->dir->info < value){
+                        ArvBin_RotationRR(raiz);
+                    }
+                    else{
+                        ArvBin_RotationRL(raiz);
+                    }
+                }
+            }
+        }
+        else{
+            printf("Valor duplicado!\n");
+            return 0;
+        }
+    }
+    atual->alt = maior(alt_node(atual->esq), alt_node(atual->dir)) + 1;
+
+    return res;
+}
+
+Node *procuraMenor(Node *atual){
+    Node *no1 = atual;
+    Node *no2 = atual->esq;
+    while(no2 != NULL){
         no1 = no2;
-        no2 = no2->dir;
+        no2 = no2->esq;
     }
-
-    if(no1 != atual){
-        no1->dir = no2->esq;
-        no2->esq = atual->esq;
-    }
-
-    no2->dir = atual->dir;
-    free(atual);
-    return no2;
+    return no1;
 }
 
 bool ArvBin_remove(ArvBin *raiz, int value){
-    if(raiz == NULL) // Verifica se a Árvore não foi alocada
-        return 0;
+	if(*raiz == NULL){// value nao existe
+	    printf("Esse valor nao existe!\n");
+	    return 0;
+	}
 
-    Node *anterior = NULL; // Nó auxiliar anterior ao atual
-    Node *atual = *raiz; // Nó atual que percorrerá a árvore começando na raiz
-
-    while(atual != NULL){ // Enquanto o Nó atual é um nó válido (O atual sai do while com o valor NULL, quando ele é o nó filho de uma folha)
-        if(value == atual->info){ // Quando encontrar o valor
-
-            if(atual == *raiz) 
-                *raiz = remove_atual(atual); // Se o valor que eu quero remover está na raiz, basta removê-lo
-                
-            else{
-                if(anterior->dir == atual) // Se o nó anterior
-                    anterior->dir = remove_atual(atual);
+    int res;
+	if(value < (*raiz)->info){
+	    if((res = ArvBin_remove(&(*raiz)->esq,value)) == 1){
+            if(fatorBalanceamento_node(*raiz) >= 2){
+                if(alt_node((*raiz)->dir->esq) <= alt_node((*raiz)->dir->dir))
+                    ArvBin_RotationRR(raiz);
                 else
-                    anterior->esq = remove_atual(atual);
+                    ArvBin_RotationRL(raiz);
             }
-            return 1;
-        }
-        anterior = atual;
-        if(value > atual->info){
-            atual = atual->dir;
-        }
-        else
-            atual = atual->esq;
-    }
+	    }
+	}
+
+	if((*raiz)->info < value){
+	    if((res = ArvBin_remove(&(*raiz)->dir, value)) == 1){
+            if(fatorBalanceamento_node(*raiz) >= 2){
+                if(alt_node((*raiz)->esq->dir) <= alt_node((*raiz)->esq->esq) )
+                    ArvBin_RotationLL(raiz);
+                else
+                    ArvBin_RotationLR(raiz);
+            }
+	    }
+	}
+
+	if((*raiz)->info == value){
+	    if(((*raiz)->esq == NULL || (*raiz)->dir == NULL)){// no tem 1 filho ou nenhum
+			Node *oldNode = (*raiz);
+			if((*raiz)->esq != NULL)
+                *raiz = (*raiz)->esq;
+            else
+                *raiz = (*raiz)->dir;
+			free(oldNode);
+		}else { // no tem 2 filhos
+			Node* temp = procuraMenor((*raiz)->dir);
+			(*raiz)->info = temp->info;
+			ArvBin_remove(&(*raiz)->dir, (*raiz)->info);
+            if(fatorBalanceamento_node(*raiz) >= 2){
+				if(alt_node((*raiz)->esq->dir) <= alt_node((*raiz)->esq->esq))
+					ArvBin_RotationLL(raiz);
+				else
+					ArvBin_RotationLR(raiz);
+			}
+		}
+		if (*raiz != NULL)
+            (*raiz)->alt = maior(alt_node((*raiz)->esq),alt_node((*raiz)->dir)) + 1;
+		return 1;
+	}
+
+	(*raiz)->alt = maior(alt_node((*raiz)->esq),alt_node((*raiz)->dir)) + 1;
+
+	return res;
 }
 
 bool ArvBin_consult(ArvBin *raiz, int value){

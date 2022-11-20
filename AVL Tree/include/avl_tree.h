@@ -37,11 +37,23 @@ void ArvBin_emOrdem(ArvBin *raiz);
 // Pós-Ordem: ESQUERDA - DIREITA - RAIZ 
 void ArvBin_posOrdem(ArvBin *raiz);
 
+// Função de Rotação LL
+void ArvBin_RotationLL(ArvBin *raiz);
+
+// Função de Rotação RR
+void ArvBin_RotationRR(ArvBin *raiz);
+
+// Função de Rotação LR
+void ArvBin_RotationLR(ArvBin *raiz);
+
+// Função de Rotação RL
+void ArvBin_RotationRL(ArvBin *raiz);
+
 // Inserção de um valor na árvore
 bool ArvBin_insert(ArvBin *raiz, int value); // Retorna 1 se foi efetuada a operação, e 0 se o elemento já existe ou se não alocou
 
 // Remoção de um valor da árvore (sem valores repetidos)
-Node *remove_atual(Node *atual);
+Node *procuraMenor(Node *atual);
 bool ArvBin_remove(ArvBin *raiz, int value); // Busca o nó a ser removido
 
 // Função para consultar se existe um valor na árvore
