@@ -7,7 +7,7 @@ SRC = ./src
 all: libed myapps
 
 libed:
-	gcc -c $(SRC)/NOME_DO_TAD.c -I $(INCLUDE) -o $(OBJ)/NOME_DO_TAD.o
+	gcc -c $(SRC)/avl_tree.c -I $(INCLUDE) -o $(OBJ)/avl_tree.o
 
 myapps:
 	gcc $(APPS)/app.c $(OBJ)/*.o -I $(INCLUDE) -o $(BIN)/app
